@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IniParser;
+using IniParser.Model;
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;
@@ -12,8 +13,19 @@ namespace FIFALauncherPatcher
     /// </summary>
     public partial class MainWindow : Window
     {
+        FileIniDataParser iniParser = new FileIniDataParser();
+
+        #region SETTINGS
+
+        private bool useMetric = true;
+        
+
+        #endregion
+
         private string gamePath;
-        public string GamePath { get => gamePath;
+        public string GamePath
+        {
+            get => gamePath;
             set
             {
                 gamePath = value;
@@ -26,14 +38,46 @@ namespace FIFALauncherPatcher
             InitializeComponent();
         }
 
-        private int i;
         public void Patch()
         {
-            if (!Directory.Exists(tboxPath.Text))
+            GamePath = tboxPath.Text;
+            if (!Directory.Exists(GamePath))
             {
-                MessageBox.Show("Invalid Path");
+                System.Windows.MessageBox.Show("Invalid Path");
                 return;
             }
+
+            string configPath = Path.Combine(GamePath, "FIFASetup", "config.ini");
+            string localePath = Path.Combine(GamePath, "Data", "locale.ini");
+
+            // FIFA uses // to start a comment instead of ;
+            iniParser.Parser.Configuration.CommentString = "//";
+
+            #region CONFIG
+
+            // Set: Bypass Launcher Settings
+            IniData configData = iniParser.ReadFile(configPath);
+            configData.Global["AUTO_LAUNCH"] = "1";
+            iniParser.WriteFile(configPath, configData);
+
+            #endregion
+
+
+
+            #region LOCALE-CONFIG
+
+            // Set: Bypass Language Selection
+            IniData localeData = iniParser.ReadFile(localePath);
+            localeData["LOCALE"]["USE_LANGUAGE_SELECT"] = "0";
+
+            // Set: Use Metric units for weight and length
+            localeData["REGIONALIZATION_eng_us"]["LENGTH_UNIT_FORMAT"] = useMetric ? "METRIC" : "IMPERIAL_US";
+            localeData["REGIONALIZATION_eng_us"]["WEIGHT_UNIT_FORMAT"] = useMetric ? "METRIC" : "IMPERIAL_US";
+            iniParser.WriteFile(localePath, localeData);
+
+            #endregion
+
+            MessageBox.Show("Done Patching!");
         }
 
         public void OpenGameFolderDialog()
@@ -57,7 +101,12 @@ namespace FIFALauncherPatcher
             OpenGameFolderDialog();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void BtnSelectFolder_Click(object sender, RoutedEventArgs e)
+        {
+            OpenGameFolderDialog();
+        }
+
+        private void BtnPatch_Click(object sender, RoutedEventArgs e)
         {
             Patch();
         }

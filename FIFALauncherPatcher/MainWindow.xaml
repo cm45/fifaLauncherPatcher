@@ -9,8 +9,9 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Label Content="FIFA-Installation GamePath" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="300"/>
-        <TextBox x:Name="tboxPath" HorizontalAlignment="Left" Height="23" Margin="10,36,0,0" TextWrapping="Wrap" Text="{Binding GamePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="300" MouseDoubleClick="TboxPath_MouseDoubleClick"/>
-        <Button Content="Patch Game" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top" Width="300" Click="Button_Click"/>
+        <TextBox x:Name="tboxPath" HorizontalAlignment="Left" Height="23" Margin="10,36,0,0" TextWrapping="Wrap" Text="{Binding GamePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="200" MouseDoubleClick="TboxPath_MouseDoubleClick"/>
+        <Button x:Name="btnPatch" Content="Patch Game" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top" Width="300" Click="BtnPatch_Click" Height="21"/>
+        <Button x:Name="btnSelectFolder" Content="Select Folder" HorizontalAlignment="Left" Margin="215,36,0,0" VerticalAlignment="Top" Width="95" Height="23" Click="BtnSelectFolder_Click"/>
 
     </Grid>
 </Window>
