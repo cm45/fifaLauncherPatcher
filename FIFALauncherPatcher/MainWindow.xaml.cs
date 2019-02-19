@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace FIFALauncherPatcher
 {
@@ -20,9 +12,54 @@ namespace FIFALauncherPatcher
     /// </summary>
     public partial class MainWindow : Window
     {
+        private string gamePath;
+        public string GamePath { get => gamePath;
+            set
+            {
+                gamePath = value;
+                tboxPath.Text = value;
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private int i;
+        public void Patch()
+        {
+            if (!Directory.Exists(tboxPath.Text))
+            {
+                MessageBox.Show("Invalid Path");
+                return;
+            }
+        }
+
+        public void OpenGameFolderDialog()
+        {
+            FolderBrowserDialog dialog = new FolderBrowserDialog
+            {
+                Description = @"Select Folder (Example: C:\Program Files (x86)\Origin Games\",
+                ShowNewFolderButton = false
+            };
+
+            DialogResult result = dialog.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK)
+            {
+                GamePath = dialog.SelectedPath;
+            }
+        }
+
+        private void TboxPath_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            OpenGameFolderDialog();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Patch();
         }
     }
 }

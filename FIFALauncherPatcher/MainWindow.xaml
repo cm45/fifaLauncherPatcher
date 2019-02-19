@@ -1,12 +1,16 @@
-﻿<Window x:Class="FIFALauncherPatcher.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FIFALauncherPatcher"
+        xmlns:Properties="clr-namespace:FIFALauncherPatcher.Properties" x:Class="FIFALauncherPatcher.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Label Content="FIFA-Installation GamePath" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="300"/>
+        <TextBox x:Name="tboxPath" HorizontalAlignment="Left" Height="23" Margin="10,36,0,0" TextWrapping="Wrap" Text="{Binding GamePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="300" MouseDoubleClick="TboxPath_MouseDoubleClick"/>
+        <Button Content="Patch Game" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top" Width="300" Click="Button_Click"/>
+
     </Grid>
 </Window>
