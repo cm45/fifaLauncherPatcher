@@ -6,12 +6,28 @@
         xmlns:local="clr-namespace:FIFALauncherPatcher"
         xmlns:Properties="clr-namespace:FIFALauncherPatcher.Properties" x:Class="FIFALauncherPatcher.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="137" Width="339">
+        SizeToContent="Height"
+        Title="FIFA - Launcher-Patcher" Width="320" ResizeMode="CanMinimize">
     <Grid>
-        <Label Content="FIFA-Installation GamePath" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="300"/>
-        <TextBox x:Name="tboxPath" HorizontalAlignment="Left" Height="23" Margin="10,36,0,0" TextWrapping="Wrap" Text="{Binding GamePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="200" MouseDoubleClick="TboxPath_MouseDoubleClick"/>
-        <Button x:Name="btnPatch" Content="Patch Game" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top" Width="300" Click="BtnPatch_Click" Height="21"/>
-        <Button x:Name="btnSelectFolder" Content="Select Folder" HorizontalAlignment="Left" Margin="215,36,0,0" VerticalAlignment="Top" Width="95" Height="23" Click="BtnSelectFolder_Click"/>
+        <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10" >
+            <Label x:Name="lblTitle" Content="FIFA-Installation Gamepath:" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"/>
 
+            <Grid Height="20" Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*" MaxWidth="100"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Column="0" Margin="0,0,5,0" x:Name="tboxPath" HorizontalAlignment="Stretch" TextWrapping="Wrap" MouseDoubleClick="TboxPath_MouseDoubleClick"/>
+                <Button Grid.Column="1" x:Name="btnSelectFolder" Content="Select Folder" HorizontalAlignment="Stretch" Click="BtnSelectFolder_Click"/>
+            </Grid>
+
+            <Label x:Name="lblSettings" Content="Options:" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"/>
+            <CheckBox x:Name="checkBoxSkipLauncher" Content="Skip Game Launcher" HorizontalAlignment="Stretch" IsChecked="True"/>
+            <CheckBox x:Name="checkBoxSkipLanguageSelection" Content="Skip Language Selection" HorizontalAlignment="Stretch" IsChecked="True"/>
+            <CheckBox x:Name="checkBoxForceMetric" Content="Force Metric System" HorizontalAlignment="Stretch"/>
+
+            <Button x:Name="btnPatch" Content="Patch Game" HorizontalAlignment="Stretch" Click="BtnPatch_Click" Margin="0,10,0,0"/>
+        </StackPanel>
     </Grid>
 </Window>

@@ -1,4 +1,5 @@
-﻿using IniParser;
+﻿using System;
+using IniParser;
 using IniParser.Model;
 using System.IO;
 using System.Windows;
@@ -38,10 +39,21 @@ namespace FIFALauncherPatcher
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Changes Config files
+        /// </summary>
         public void Patch()
         {
             GamePath = tboxPath.Text;
+
+            // Check if Directory exists:
             if (!Directory.Exists(GamePath))
+            {
+                System.Windows.MessageBox.Show("Invalid Path");
+                return;
+            }
+            // Check if selected correct Directory:
+            else if (!File.Exists(Path.Combine(GamePath, "FIFA19.exe")))
             {
                 System.Windows.MessageBox.Show("Invalid Path");
                 return;
@@ -57,18 +69,16 @@ namespace FIFALauncherPatcher
 
             // Set: Bypass Launcher Settings
             IniData configData = iniParser.ReadFile(configPath);
-            configData.Global["AUTO_LAUNCH"] = "1";
+            configData.Global["AUTO_LAUNCH"] = (bool)checkBoxSkipLauncher.IsChecked ? "1" : "0";
             iniParser.WriteFile(configPath, configData);
 
             #endregion
-
-
 
             #region LOCALE-CONFIG
 
             // Set: Bypass Language Selection
             IniData localeData = iniParser.ReadFile(localePath);
-            localeData["LOCALE"]["USE_LANGUAGE_SELECT"] = "0";
+            localeData["LOCALE"]["USE_LANGUAGE_SELECT"] = (bool)checkBoxSkipLanguageSelection.IsChecked ? "0" : "1";
 
             // Set: Use Metric units for weight and length
             localeData["REGIONALIZATION_eng_us"]["LENGTH_UNIT_FORMAT"] = useMetric ? "METRIC" : "IMPERIAL_US";
@@ -85,7 +95,8 @@ namespace FIFALauncherPatcher
             FolderBrowserDialog dialog = new FolderBrowserDialog
             {
                 Description = @"Select Folder (Example: C:\Program Files (x86)\Origin Games\",
-                ShowNewFolderButton = false
+                ShowNewFolderButton = false,
+                SelectedPath = @"C:\Program Files (x86)\Origin Games\"
             };
 
             DialogResult result = dialog.ShowDialog();
