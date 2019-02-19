@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FIFALauncherPatcher"
         xmlns:Properties="clr-namespace:FIFALauncherPatcher.Properties" x:Class="FIFALauncherPatcher.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="137" Width="339">
     <Grid>
         <Label Content="FIFA-Installation GamePath" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="300"/>
         <TextBox x:Name="tboxPath" HorizontalAlignment="Left" Height="23" Margin="10,36,0,0" TextWrapping="Wrap" Text="{Binding GamePath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="200" MouseDoubleClick="TboxPath_MouseDoubleClick"/>
