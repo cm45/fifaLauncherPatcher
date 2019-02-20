@@ -1,6 +1,7 @@
-﻿using System;
-using IniParser;
+﻿using IniParser;
 using IniParser.Model;
+using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;
@@ -14,14 +15,41 @@ namespace FIFALauncherPatcher
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static string DEFAULT_GAMEPATH = @"C:\Program Files (x86)\Origin Games\FIFA 19";
+
         FileIniDataParser iniParser = new FileIniDataParser();
 
-        #region SETTINGS
+        private string configPath = Path.Combine(Environment.CurrentDirectory, "config.cfg");
 
-        private bool useMetric = true;
-        
 
-        #endregion
+        public Config ApplicationConfig
+        {
+            get
+            {
+                if (!File.Exists(configPath)) return ResetConfig();
+
+                try
+                {
+                    return JsonConvert.DeserializeObject<Config>(File.ReadAllText(configPath));
+                }
+                catch
+                {
+                    MessageBox.Show("Couldn't read configurations... Resetting config file...");
+                    return ResetConfig();
+                }
+            }
+            set
+            {
+                try
+                {
+                    File.WriteAllText(configPath, JsonConvert.SerializeObject(value, Formatting.Indented));
+                }
+                catch
+                {
+                    MessageBox.Show("Couldn't save configurations");
+                }
+            }
+        }
 
         private string gamePath;
         public string GamePath
@@ -29,6 +57,7 @@ namespace FIFALauncherPatcher
             get => gamePath;
             set
             {
+                if (string.IsNullOrWhiteSpace(value)) return;
                 gamePath = value;
                 tboxPath.Text = value;
             }
@@ -37,10 +66,49 @@ namespace FIFALauncherPatcher
         public MainWindow()
         {
             InitializeComponent();
+            LoadConfig();
         }
 
         /// <summary>
-        /// Changes Config files
+        /// Reads current configurations and save them in a file
+        /// </summary>
+        private void SaveConfig()
+        {
+            ApplicationConfig = new Config()
+            {
+                path = GamePath,
+                skipGameLauncher = (bool)checkBoxSkipLauncher.IsChecked,
+                skipLanguageSelection = (bool)checkBoxSkipLanguageSelection.IsChecked,
+                forceMetricUnits = (bool)checkBoxForceMetric.IsChecked
+            };
+        }
+
+        /// <summary>
+        /// Resets Config
+        /// </summary>
+        /// <returns>Default Config</returns>
+        Config ResetConfig()
+        {
+            Config defaultConfig = new Config(DEFAULT_GAMEPATH);
+            ApplicationConfig = defaultConfig;
+            return defaultConfig;
+        }
+
+        /// <summary>
+        /// Loads the saved application options
+        /// </summary>
+        private void LoadConfig()
+        {
+            Config cfg = ApplicationConfig;
+
+            GamePath = cfg.path;
+            checkBoxSkipLauncher.IsChecked = cfg.skipGameLauncher;
+            checkBoxSkipLanguageSelection.IsChecked = cfg.skipLanguageSelection;
+            checkBoxForceMetric.IsChecked = cfg.forceMetricUnits;
+        }
+
+        /// <summary>
+        /// Changes Application-Config files
         /// </summary>
         public void Patch()
         {
@@ -62,41 +130,43 @@ namespace FIFALauncherPatcher
             string configPath = Path.Combine(GamePath, "FIFASetup", "config.ini");
             string localePath = Path.Combine(GamePath, "Data", "locale.ini");
 
+            #region CONFIG
+
             // FIFA uses // to start a comment instead of ;
             iniParser.Parser.Configuration.CommentString = "//";
-
-            #region CONFIG
 
             // Set: Bypass Launcher Settings
             IniData configData = iniParser.ReadFile(configPath);
             configData.Global["AUTO_LAUNCH"] = (bool)checkBoxSkipLauncher.IsChecked ? "1" : "0";
             iniParser.WriteFile(configPath, configData);
 
-            #endregion
-
-            #region LOCALE-CONFIG
-
             // Set: Bypass Language Selection
             IniData localeData = iniParser.ReadFile(localePath);
             localeData["LOCALE"]["USE_LANGUAGE_SELECT"] = (bool)checkBoxSkipLanguageSelection.IsChecked ? "0" : "1";
 
             // Set: Use Metric units for weight and length
+            bool useMetric = (bool)checkBoxForceMetric.IsChecked;
             localeData["REGIONALIZATION_eng_us"]["LENGTH_UNIT_FORMAT"] = useMetric ? "METRIC" : "IMPERIAL_US";
             localeData["REGIONALIZATION_eng_us"]["WEIGHT_UNIT_FORMAT"] = useMetric ? "METRIC" : "IMPERIAL_US";
             iniParser.WriteFile(localePath, localeData);
 
             #endregion
 
+            SaveConfig();
+
             MessageBox.Show("Done Patching!");
         }
 
+        /// <summary>
+        /// Opens folder dialog sets Gamepath after successful selection
+        /// </summary>
         public void OpenGameFolderDialog()
         {
             FolderBrowserDialog dialog = new FolderBrowserDialog
             {
-                Description = @"Select Folder (Example: C:\Program Files (x86)\Origin Games\",
+                Description = $"Select Folder (Example: {DEFAULT_GAMEPATH})",
                 ShowNewFolderButton = false,
-                SelectedPath = @"C:\Program Files (x86)\Origin Games\"
+                SelectedPath = ApplicationConfig.path ?? DEFAULT_GAMEPATH
             };
 
             DialogResult result = dialog.ShowDialog();
@@ -106,6 +176,8 @@ namespace FIFALauncherPatcher
                 GamePath = dialog.SelectedPath;
             }
         }
+
+        #region Events
 
         private void TboxPath_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -121,5 +193,8 @@ namespace FIFALauncherPatcher
         {
             Patch();
         }
+
+        #endregion
+
     }
 }

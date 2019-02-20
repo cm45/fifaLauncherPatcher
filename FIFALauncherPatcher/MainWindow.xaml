@@ -7,7 +7,7 @@
         xmlns:Properties="clr-namespace:FIFALauncherPatcher.Properties" x:Class="FIFALauncherPatcher.MainWindow"
         mc:Ignorable="d"
         SizeToContent="Height"
-        Title="FIFA - Launcher-Patcher" Width="320" ResizeMode="CanMinimize">
+        Title="FIFA - Launcher-Patcher" Width="448" ResizeMode="CanMinimize">
     <Grid>
         <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10" >
             <Label x:Name="lblTitle" Content="FIFA-Installation Gamepath:" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"/>
@@ -23,9 +23,9 @@
             </Grid>
 
             <Label x:Name="lblSettings" Content="Options:" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left"/>
-            <CheckBox x:Name="checkBoxSkipLauncher" Content="Skip Game Launcher" HorizontalAlignment="Stretch" IsChecked="True"/>
-            <CheckBox x:Name="checkBoxSkipLanguageSelection" Content="Skip Language Selection" HorizontalAlignment="Stretch" IsChecked="True"/>
-            <CheckBox x:Name="checkBoxForceMetric" Content="Force Metric System" HorizontalAlignment="Stretch"/>
+            <CheckBox x:Name="checkBoxSkipLauncher" Content="Skip Game Launcher" HorizontalAlignment="Stretch"/>
+            <CheckBox x:Name="checkBoxSkipLanguageSelection" Content="Skip Language Selection" HorizontalAlignment="Stretch"/>
+            <CheckBox x:Name="checkBoxForceMetric" Content="Force Metric Unit System" HorizontalAlignment="Stretch"/>
 
             <Button x:Name="btnPatch" Content="Patch Game" HorizontalAlignment="Stretch" Click="BtnPatch_Click" Margin="0,10,0,0"/>
         </StackPanel>
