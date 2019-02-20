@@ -6,7 +6,7 @@
 
 # Download:
 Either:
-* Get the build_v0.1.zip file from: https://github.com/cm45/fifaLauncherPatcher/releases
+* Get the build_vX.X.X.zip file from: https://github.com/cm45/fifaLauncherPatcher/releases/latest and unzip it, or
 * Build it yourself using the source code
 
 # Usage
