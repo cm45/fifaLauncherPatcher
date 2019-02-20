@@ -2,7 +2,7 @@
 * Any recent FIFA should work (That uses Frostbite Engine at least)
 * Won't result in a ban as it only overrides some configs and doesn't change gamefiles
 * After every FIFA-Patch the config resets which is why I made this application, instead of changing all config-files manually each time.
-* Portable (No install necessary)
+* No install necessary (You can build yourself an installer if you really want that)
 
 # Download:
 Either:
