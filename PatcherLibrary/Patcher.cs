@@ -2,13 +2,11 @@
 
 using IniParser;
 using IniParser.Model;
-using System.Windows.Forms;
 
 using Library;
 using System.Text.RegularExpressions;
 using System.Linq;
 using System.Collections.Generic;
-using System;
 
 namespace Library
 {
@@ -37,7 +35,7 @@ namespace Library
         /// <summary>
         /// Changes Application-Config files
         /// </summary>
-        public bool Patch(AppConfig cfg = null, MessageType msgType = MessageType.NONE)
+        public bool Patch(AppConfig cfg = null)
         {
             Regex fileNameRegEx = new Regex(@"FIFA..");
 
@@ -47,15 +45,15 @@ namespace Library
             // Check if Directory exists:
             if (!Directory.Exists(GamePath))
             {
-                Message("Invalid Path", msgType, MessageSuccess.ERROR);
+                MessageBox.Show("Invalid Path");
                 return false;
             }
             // Check if selected correct Directory:
             else if (Directory.GetFiles(GamePath, "*.exe").Where(GamePath => fileNameRegEx.IsMatch(GamePath)).Count() <= 0)
             {
-                Message("Invalid Path", msgType, MessageSuccess.ERROR);
+                MessageBox.Show("Invalid Path");
                 return false;
-            }
+            }            
 
             string configPath = Path.Combine(GamePath, "FIFASetup", "config.ini");
             string localePath = Path.Combine(GamePath, "Data", "locale.ini");
@@ -66,23 +64,9 @@ namespace Library
             iniParser.Parser.Configuration.CommentString = "//";
 
             // Set: Bypass Launcher Settings
-            if (!File.Exists(configPath))
-            {
-                Message(configPath + " does not exist!", msgType, MessageSuccess.ERROR);
-                return false;
-            }
-            try
-            {
-                IniData configData = iniParser.ReadFile(configPath);
-                configData.Global["AUTO_LAUNCH"] = Config.skipGameLauncher ? "1" : "0";
-                iniParser.WriteFile(configPath, configData);
-            }
-            catch (Exception)
-            {
-                Message("Can not edit: " + configPath + "\nCorrupted File or insufficient write permissions!", msgType, MessageSuccess.ERROR);
-                return false;
-            }
-
+            IniData configData = iniParser.ReadFile(configPath);
+            configData.Global["AUTO_LAUNCH"] = Config.skipGameLauncher ? "1" : "0";
+            iniParser.WriteFile(configPath, configData);
 
             // Set: Bypass Language Selection
             IniData localeData = iniParser.ReadFile(localePath);
@@ -96,44 +80,9 @@ namespace Library
 
             #endregion
 
-            Message("Done Patching!", msgType, MessageSuccess.SUCCESS);
             Config = Config;
+            MessageBox.Show("Done Patching!");
             return true;
-        }
-
-        public enum MessageType
-        {
-            NONE,
-            MESSAGEBOX,
-            CLI
-        }
-        public enum MessageSuccess
-        {
-            INFO,
-            SUCCESS,
-            WARNING,
-            ERROR
-        }
-
-        private void Message(string msg, MessageType msgType = MessageType.NONE, MessageSuccess success = MessageSuccess.INFO)
-        {
-            switch (msgType)
-            {
-                case MessageType.NONE:
-                    break;
-                case MessageType.MESSAGEBOX:
-                    MessageBox.Show(msg);
-                    break;
-                case MessageType.CLI:
-                    Console.ForegroundColor = success == MessageSuccess.INFO ? ConsoleColor.White :
-                                                success == MessageSuccess.SUCCESS ? ConsoleColor.Green :
-                                                success == MessageSuccess.WARNING ? ConsoleColor.Yellow : ConsoleColor.Red;
-                    Console.WriteLine(msg);
-                    Console.ForegroundColor = ConsoleColor.White;
-                    break;
-                default:
-                    break;
-            }
         }
 
         /// <summary>

@@ -13,6 +13,9 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using Library;
+
+
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 namespace UWP_GUI
@@ -22,9 +25,52 @@ namespace UWP_GUI
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        readonly Patcher patcher = new Patcher();
+
         public MainPage()
         {
             this.InitializeComponent();
+            InitUI();
+        }
+
+        private void InitUI()
+        {
+            AppConfig cfg = ConfigManager.AppConfig;
+
+            tboxPath.Text = cfg.path;
+            checkBoxSkipLauncher.IsChecked = cfg.skipGameLauncher;
+            checkBoxSkipLanguageSelection.IsChecked = cfg.skipLanguageSelection;
+            checkBoxForceMetric.IsChecked = cfg.forceMetricUnits;
+        }
+
+        private void BtnPatch_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ToggleForceMetric_Toggled(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ToggleSkipLanguageSelection_Toggled(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ToggleSkipLauncher_Toggled(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TboxPath_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void BtnSelectFolder_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
