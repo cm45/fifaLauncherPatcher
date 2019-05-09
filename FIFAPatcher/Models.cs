@@ -4,16 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FIFALauncherPatcher
+namespace Models
 {
-    public struct Config
+    public class AppConfig
     {
         public string path;
         public bool skipGameLauncher;
         public bool skipLanguageSelection;
         public bool forceMetricUnits;
 
-        public Config(string path)
+        public AppConfig(string path)
         {
             this.path = path;
             this.skipGameLauncher = true;
