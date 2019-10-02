@@ -51,7 +51,7 @@ namespace FIFALauncherPatcher
                 forceMetricUnits = (bool)checkBoxForceMetric.IsChecked
             };
 
-            patcher.Patch(config);
+            patcher.Patch(config, Patcher.MessageType.MESSAGEBOX);
         }
 
         #endregion
