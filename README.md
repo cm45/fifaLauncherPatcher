@@ -1,3 +1,6 @@
+# Deprecated
+Use https://github.com/cm45/FIFA_Utils/ instead!
+
 # General Information
 * Any recent FIFA should work (That uses Frostbite Engine at least)
 * Won't result in a ban as it only overrides some configs and doesn't change gamefiles
